@@ -1,5 +1,5 @@
-# Trabalho de conclução se curso Engenharia de Computação
-Trabalho de conclução se curso, para o bacharelado em Engenharia de Computação pela Universidade Paulista, onde tivemos que integrar hardware e software
+# Trabalho de conclução de curso Engenharia de Computação
+Trabalho de conclução de curso, para o bacharelado em Engenharia de Computação pela Universidade Paulista, onde tivemos que integrar hardware e software
 
 # Objetivo e contexto:
 ## 1.2.1. Objetivo Geral
