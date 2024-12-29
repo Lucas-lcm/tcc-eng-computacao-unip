@@ -1,0 +1,104 @@
+---
+title: "**APÊNDICE B - Código para configuração do RASPBERRY PI para recebimento das distâncias via MQTT, ativação da câmera e transferência as fotos para o Googel Drive**"
+output: pdf_document
+---
+
+```{python, RASP_PYTHON_CONFIG, echo=TRUE}
+# Pacotes
+
+import os
+import time
+import subprocess
+import json
+import logging
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload  
+#import paho.mqtt.client as mqtt
+
+# Variáveis globais
+SERVICE_ACCOUNT_FILE = '/home/tccunip/python_scripts/.json'  # Substitua pelo caminho do seu arquivo JSON
+PHOTO_DIRECTORY = '/home/tccunip/fotos'
+TARGET_FOLDER_ID = ''  # Substitua pelo ID da sua pasta no Google Drive
+taking_pictures = False
+
+# Configurações do log
+
+logging.basicConfig(level=logging.DEBUG, format = '%(asctime)s - %(levelname)s - %(message)s',
+                   handlers=[
+                        logging.FileHandler('app.log'),
+                        logging.StreamHandler()
+                   ])
+logger = logging.getLogger(__name__)
+
+logger.debug('Iniciando app')
+logger.info('Conectando ao broker MQTT')
+
+# Função para autenticar no Google Drive
+def authenticate():
+    try:
+        creds = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=['https://www.googleapis.com/auth/drive'])
+        return creds
+        logger.debug(f'Autentiação API Google realizada com sucesso')
+    except Exception as e:
+        logger.error(f'Erro ao autenticar, verifique as variáveis globais: {str(e)}')
+
+# Função para enviar um arquivo para o Google Drive
+def upload_file_to_drive(file_path, folder_id):
+    try:
+        service = build('drive', 'v3', credentials=authenticate())
+        file_metadata = {'name': os.path.basename(file_path), 'parents': [folder_id]}
+        media = MediaFileUpload(file_path, mimetype='image/jpeg', resumable=True)  
+        file = service.files().create(body=file_metadata,
+                                        media_body=media,
+                                        fields='id').execute()
+        logger.debug(f'Foto enviado para a cloud')
+    except Exception as e:
+        logger.error(f'Erro ao enviar a imagem via API {str(e)}')
+
+# Função que ativa a câmera e tira a foto
+def take_photo(file_path):
+    try:
+        subprocess.run(["libcamera-still", "-o", file_path, "--nopreview"], check=True, timeout=25)
+        foto=+1
+        logger.debug(f'Diferença de distância detectada, foto tirada e salva')
+    except Exception as e:
+        logger.error(f'Erro ao tirar a foto, verifique o funcionamento da câmera {str(e)}')
+
+# Função para conectar no contexto do ESP32
+def on_connect(client, userdata, flags, rc):
+    try:
+        client.subscribe("sensor/ultrasonic")
+        logger.debug(f'Conectado no contexto, recebendo informações da distância')
+    except Exception as e:
+        logger.error(f'Erro ao se conectar ao contexto, verfique as configuração do ESP {str(e)}')
+
+# Função de contexto, para executar as ações
+def on_message(client, userdata,msg):
+    try:
+        global taking_pictures
+        data = json.loads(msg.payload.decode()) #decodifica o JSON
+        distancia =  float(data["distance"]) # extrai o valor da distancia
+        if distancia < 20:
+            if not taking_pictures:
+                taking_pictures = True
+            if taking_pictures:
+                    foto = 1
+                    while foto <= 3:
+                        timestamp = time.strftime("%Y%m%d-%H%M%S")
+                        file_path = os.path.join(PHOTO_DIRECTORY, f'foto_{timestamp}_{foto}.jpg')
+                        take_photo(file_path)
+                        upload_file_to_drive(file_path, TARGET_FOLDER_ID)
+                        foto+=1
+        else:
+            if taking_pictures:
+                taking_pictures = False
+    except Exception as e:
+        logger.error(f'Erro na função de contexo, verifique à aplicação {str(e)}')
+        
+#client = mqtt.Client()
+#client.on_connect = on_connect
+#client.on_message = on_message
+#client.connect("localhost", 1883, 60)
+#client.loop_forever()
+```
