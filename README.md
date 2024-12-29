@@ -42,4 +42,5 @@ Trabalho de conclução se curso, para o bacharelado em Engenharia de Computaç�
   De forma resumida, temos dois códigos principais:
   - Código de configuração do ESP32 em C++ Arduino <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg" height="40" width="40" />
   - Código que controla a solução IOT em Python <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" height="40" width="40" />
-  Além disso, utilizei as APIs do Google Cloud, para enviar os dados de análise para o Drive, e também as APIs do RoboFlow para realizar a análise das patologias.
+
+Além disso, utilizei as APIs do Google Cloud, para enviar os dados de análise para o Drive, e também as APIs do RoboFlow para realizar a análise das patologias.
