@@ -16,8 +16,8 @@ import cv2
 SERVICE_ACCOUNT_FILE = '/home/tccunip/python_scripts/pavision-428222-25bf95f32da1.json'  # Substitua pelo caminho do seu arquivo JSON
 PHOTO_DIRECTORY_not_process = '/home/tccunip/fotos'
 PHOTO_DIRECTORY_analyzed = '/home/tccunip/fotos_analisadas'
-TARGET_FOLDER_ID_not_process = '1caH-b-zFXDh3aBxY6tZpZ9dL0YldIPsa'  # Substitua pelo ID da sua pasta no Google Drive
-TARGET_FOLDER_ID_analyzed = '1qq_ZF4nyLpHW8lgFr2s7mfHp74kK1tdw' 
+TARGET_FOLDER_ID_not_process = ''  # Substitua pelo ID da sua pasta no Google Drive
+TARGET_FOLDER_ID_analyzed = '' # Substitua pelo ID da sua pasta no Google Drive
 taking_pictures = False
 
 # Configurações do log
