@@ -30,6 +30,7 @@ logging.basicConfig(level=logging.DEBUG, format = '%(asctime)s - %(levelname)s -
 logger = logging.getLogger(__name__)
 
 logger.debug('Iniciando app')
+
 logger.info('Conectando ao broker MQTT')
 
 # Função para autenticar no Google Drive
