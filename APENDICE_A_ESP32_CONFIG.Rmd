@@ -9,9 +9,9 @@ output: pdf_document
 #include <PubSubClient.h>
 #include <Arduino.h>
 
-const char* SSID = "LCM-Tw";
-const char* PASSWORD = "@Iron%#11";
-const char* mqtt_server = "192.168.5.159";
+const char* SSID = "Some SSID";
+const char* PASSWORD = "Some Pass";
+const char* mqtt_server = "IP";
 const int mqtt_port = 1883;
 const char* mqtt_username = "tccunip";
 const char* mqtt_password = "123";
@@ -80,4 +80,5 @@ void loop() {
   }
 }
 '
+
 ```
