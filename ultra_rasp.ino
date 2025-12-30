@@ -2,9 +2,9 @@
 #include <PubSubClient.h>
 #include <Arduino.h>
 
-const char* SSID = "Nemtenta";
-const char* PASSWORD = "@Reborn10";
-const char* mqtt_server = "192.168.159.158";
+const char* SSID = "SOME SSID";
+const char* PASSWORD = "SOME PASS";
+const char* mqtt_server = "IP";
 const int mqtt_port = 1883;
 const char* mqtt_username = "tccunip";
 const char* mqtt_password = "123";
